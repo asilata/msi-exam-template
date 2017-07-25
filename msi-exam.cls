@@ -113,6 +113,23 @@
     \end{tikzpicture}%
   \fi
 }
+\newcommand*{\CountPoints}{%
+  \zref@refused{lastquestion}%
+   \newcommand{\TotalPoints}{}
+   \newcommand{\NumberOfQuestions}{}
+  \ifnum\zref@extractdefault{lastquestion}{default}{0}>0 %
+    \count@=0 %
+    \FPeval{\partialsum}{0}
+    \@whilenum\count@<\zref@extractdefault{lastquestion}{default}{0}\relax
+    \do{%
+      \advance\count@ by\@ne
+      \FPeval{\partialsum}{clip((partialsum) + \zref@extract{question\the\count@}{default})}%
+      \zref@refused{question\the\count@}%
+    }%
+    \renewcommand{\TotalPoints}{\partialsum}
+    \renewcommand{\NumberOfQuestions}{\the\count@}
+  \fi
+  }
 \makeatother
 
 \usepackage{lastpage}
@@ -161,8 +178,9 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{1pt}
 
-\newcommand{\points}[1]{{\hspace*{\fill}\textbf{#1~pts}}}
-\newcommand{\subpoints}[1]{{\hspace*{\fill}\textit{#1~pts}}}
+\newcommand{\points}[1]{{\hspace*{\fill}\ifthenelse{\equal{#1}{1}}{\textit{1~pt}}{\textit{#1~pts}} }}
+\newcommand{\subpoints}[1]{{\hspace*{\fill}\ifthenelse{\equal{#1}{1}}{\textit{1~pt}}{\textit{#1~pts}} }}
+
 
 \renewcommand{\labelenumi}{(\alph{enumi})}
 \renewcommand{\labelenumii}{(\roman{enumii})}
@@ -181,30 +199,31 @@
 
 \mathsurround 1pt
 \newcommand{\ms}{\vspace{3mm}}
-\newcommand{\nc}{\newcommand}
-\nc{\ba}{\begin{array}}
-\nc{\ea}{\end{array}}
-\nc{\een}{\end{enumerate}}
-\nc{\ben}{\begin{enumerate}}
-\nc{\bde}{\begin{description}}
-\nc{\ede}{\end{description}}
-\nc{\tsc}{\textsc}
-\nc{\mbf}{\mathbf}
-\nc{\tbf}{\textbf}
-\nc{\noi}{\noindent}
-\nc{\bit}{\begin{itemize}}
-\nc{\eit}{\end{itemize}}
-\nc{\msnoi}{\ms \\ \noi}
+%% These definitions are evil, and _do not_ belong in a class file for general use.
+%\newcommand{\nc}{\newcommand}
+%\nc{\ba}{\begin{array}}
+%\nc{\ea}{\end{array}}
+%\nc{\een}{\end{enumerate}}
+%\nc{\ben}{\begin{enumerate}}
+%\nc{\bde}{\begin{description}}
+%\nc{\ede}{\end{description}}
+%\nc{\tsc}{\textsc}
+%\nc{\mbf}{\mathbf}
+%\nc{\tbf}{\textbf}
+%\nc{\noi}{\noindent}
+%\nc{\bit}{\begin{itemize}}
+%\nc{\eit}{\end{itemize}}
+%\nc{\msnoi}{\ms \\ \noi}
 %\newcommand{\noi}{\noindent}
-\nc{\beqnry}{\begin{eqnarray}}%
-\nc{\eeqnry}{\end{eqnarray}}%
-\nc{\non}{\nonumber}%
-\nc{\R}{\mathbb{R}}%
-\newcommand{\col}{\operatorname{col}}
-\newcommand{\nul}{\operatorname{nul}}
-\newcommand{\trace}{\operatorname{trace}}
-\newcommand{\spanset}{\operatorname{span}}
-\newcommand{\adj}{\operatorname{adj}}
+%\nc{\beqnry}{\begin{eqnarray}}%
+%\nc{\eeqnry}{\end{eqnarray}}%
+%\nc{\non}{\nonumber}%
+%\nc{\R}{\mathbb{R}}%
+%\newcommand{\col}{\operatorname{col}}
+%\newcommand{\nul}{\operatorname{nul}}
+%\newcommand{\trace}{\operatorname{trace}}
+%\newcommand{\spanset}{\operatorname{span}}
+%\newcommand{\adj}{\operatorname{adj}}
 
 
 
@@ -214,7 +233,7 @@
     \stepcounter{question}
     \storequestion{#2}%
     \clearpage
-    \noi\tbf{\gdef\quest{\the\value{question}}Question \quest \ \ifthenelse{\equal{#1}{}}{}{(#1)} \quad\points{#2}}\qrule    
+    \noindent\textbf{\gdef\quest{\the\value{question}}Question \quest \ \ifthenelse{\equal{#1}{}}{}{(#1)} \quad\points{#2}}\qrule    
 }{}
 
 
@@ -267,6 +286,7 @@
 
 
 \AtBeginDocument{
+    \CountPoints
     \thispagestyle{plain}
 
 

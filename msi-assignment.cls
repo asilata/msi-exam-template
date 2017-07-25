@@ -27,6 +27,17 @@
 \usepackage{bm}
 \usepackage[nomessages]{fp}
 \usepackage{pdfpages}
+\usepackage{enumerate}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\definecolor{medium-blue}{rgb}{0,0,0.65}
+\usepackage[pdftex,plainpages=false,hypertexnames=false,pdfpagelabels,breaklinks]{hyperref}
+\hypersetup{
+   colorlinks, linkcolor={purple},
+   citecolor={medium-blue}, urlcolor={medium-blue}
+}
+\urlstyle{same}
+
 
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
@@ -134,6 +145,16 @@
 \newcommand{\Totalpages} {\pageref{LastPage}}
 
 \usepackage{environ}
+
+\newcounter{question}
+
+\newenvironment{question}[2][]{
+    \stepcounter{question}
+    \storequestion{#2}%
+    \clearpage
+    \noindent\textbf{\gdef\quest{\the\value{question}}Question \quest \ \ifthenelse{\equal{#1}{}}{}{(#1)} \quad\points{#2}}\qrule    
+}{}
+
 %-------------------------
 % Show/Hide the answers
 %-------------------------
@@ -204,15 +225,6 @@
 
 
 
-\newcounter{question}
-
-\newenvironment{question}[2][]{
-    \stepcounter{question}
-    \storequestion{#2}%
-    %\clearpage
-    \noi\tbf{\gdef\quest{\the\value{question}}Question \quest \ \ifthenelse{\equal{#1}{}}{}{(#1)} \quad
-    \ifthenelse{\equal{#2}{0}}{}{\points{#2}}}\qrule    
-}{}
 
 
 \def\subquestionworkspacetitle{

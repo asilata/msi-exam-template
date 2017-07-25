@@ -1,5 +1,5 @@
-% This is a style file for MSI assignments, developed by Linda Stals, Griffith Ware, and Scott Morrison
-% and Stephen Roberts
+% This is a style file for MSI assignments, 
+% developed by Linda Stals, Griffith Ware, Scott Morrison, and Stephen Roberts
 %
 % You can always obtain the latest version from https://github.com/semorrison/msi-exam-template/raw/master/msi-assignment.cls
 %
@@ -26,6 +26,7 @@
 \usepackage{color}
 \usepackage{bm}
 \usepackage[nomessages]{fp}
+\usepackage{pdfpages}
 
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
@@ -50,10 +51,6 @@
 \newboolean{showgrade}
 \newboolean{showboxes}
 
-
-\newcommand{\beginsolution}{Write your solution here}
-\newcommand{\beginsubsolution}{Work space for question}
-\newcommand{\extraspaceforquestion}{Extra space for previous question}
 
 
 %% we need to do this before loading the lastpage package, which messes with \AtEndDocument
@@ -199,26 +196,6 @@
     }
 
 \mathsurround 1pt
-\newcommand{\ms}{\vspace{3mm}}
-\newcommand{\nc}{\newcommand}
-\nc{\ba}{\begin{array}}
-\nc{\ea}{\end{array}}
-\nc{\een}{\end{enumerate}}
-\nc{\ben}{\begin{enumerate}}
-\nc{\bde}{\begin{description}}
-\nc{\ede}{\end{description}}
-\nc{\tsc}{\textsc}
-\nc{\mbf}{\mathbf}
-\nc{\tbf}{\textbf}
-\nc{\noi}{\noindent}
-\nc{\bit}{\begin{itemize}}
-\nc{\eit}{\end{itemize}}
-\nc{\msnoi}{\ms \\ \noi}
-%\newcommand{\noi}{\noindent}
-\nc{\beqnry}{\begin{eqnarray}}%
-\nc{\eeqnry}{\end{eqnarray}}%
-\nc{\non}{\nonumber}%
-\nc{\R}{\mathbb{R}}%
 \newcommand{\col}{\operatorname{Col}}
 \newcommand{\nul}{\operatorname{Nul}}
 \newcommand{\trace}{\operatorname{trace}}

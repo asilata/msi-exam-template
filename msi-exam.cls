@@ -225,6 +225,8 @@
 %\newcommand{\spanset}{\operatorname{span}}
 %\newcommand{\adj}{\operatorname{adj}}
 
+\newcommand{\norm}[1]{\left|\left|#1\right|\right|}
+
 % tricky way to iterate macros over a list
 \def\semicolon{;}
 \def\applytolist#1{

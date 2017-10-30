@@ -146,7 +146,7 @@
 }
 \NewEnviron{grading}{
     \ifthenelse{\boolean{showgrade}}{
-      \singlespace {\color{red}{\bf Grading Scheme:}  \tt \begin{itemize}\BODY \end{itemize}}
+      \singlespace {\color{red}{\bf Grading Scheme:}  \tt \BODY }
     }{}
 }
 

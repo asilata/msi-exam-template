@@ -1,0 +1,36 @@
+#+title: Templates to use for exams, assignments, and worksheets at MSI
+
+* Introduction 
+  These class files are based on the instructions at the [[https://www.overleaf.com/learn/latex/Writing_your_own_class][Overleaf guide on writing your own class]], as well as the older version of this class file that was developed by Linda Stals, Griffith Ware, Scott Morrison, and Steve Roberts.
+
+* MSI exam class file
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle artifacts/msi-exam.cls :mkdirp yes
+  :END:
+  In this part of the document we'll construct the ~msi-exam.cls~ \LaTeX{} class file.
+  We begin with the front matter.
+  #+begin_src latex
+    \NeedsTeXFormat{LaTeX2e}
+    \ProvidesClass{msi-exam}[2020/06/30 MSI Exam Template]
+  #+end_src
+  Next we add some base packages that we want to load by default. Note that we write src_latex[:exports code]{\RequirePackage} instead of src_latex[:exports code]{\usepackage} because we're writing a new class file, which will be loaded before the src_latex[:exports code]{\begin{document}} statement.
+  #+begin_src latex
+    \RequirePackage{amsmath}
+    \RequirePackage{amssymb}
+    \RequirePackage{amsfonts}
+  #+end_src
+  In this part we can declare some optional options that the class file will take.
+  At the moment we only have a catchall final statement (the src_latex[:exports code]{\DeclareOption*} command). 
+  #+begin_src latex
+    \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+  #+end_src
+  Once we have declared all options, we use the following command to execute each option.
+  #+begin_src latex
+    \ProcessOptions \relax
+  #+end_src
+  The resulting ~msi-exam~ documentclass will be based on the pre-existing ~article~ documentclass, so we load it with the options we want.
+  #+begin_src latex
+    \LoadClass[a4paper, 12pt]{article}
+  #+end_src
+  
+

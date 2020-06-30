@@ -1,13 +1,14 @@
 #+title: Templates to use for exams, assignments, and worksheets at MSI
 #+latex_header: \usepackage{fullpage}
+#+include: "./template-macros.org"
 
 #+begin_src emacs-lisp :exports none
-    (setq org-latex-listings 'minted
-          org-latex-packages-alist '(("" "minted"))
-          org-latex-pdf-process
-          '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  (setq org-latex-listings 'minted
+        org-latex-packages-alist '(("" "minted"))
+        org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
   (setq org-latex-minted-options '(("breaklines" "true")
                                    ("breakanywhere" "true")))
 #+end_src
@@ -24,66 +25,67 @@
   Here is the [[https://math.mit.edu/~psh/#ExamCls][source code for the original ~exam~ documentclass]].
   
 ** Front matter and general class options  
-  We begin with the front matter.
-  #+begin_src latex
-    \NeedsTeXFormat{LaTeX2e}
-    \ProvidesClass{msi-exam}[2020/06/30 MSI Exam Template]
-  #+end_src
-  Next we add some base packages that we want to load by default. Note that we write src_latex[:exports code]{\RequirePackage} instead of src_latex[:exports code]{\usepackage} because we're writing a new class file, which will be loaded before the src_latex[:exports code]{\begin{document}} statement.
-  #+begin_src latex
-    \RequirePackage{amsmath}
-    \RequirePackage{amssymb}
-    \RequirePackage{amsfonts}
-    \RequirePackage{tikz}
-  #+end_src
-  Use the Linux Libertine font if it exists.
-  #+begin_src latex
-    \IfFileExists{libertine.sty}{%
-      \RequirePackage{libertine}
-      \IfFileExists{newtxmath.sty}{%
-        \RequirePackage[libertine]{newtxmath}
-      }{}
-    }{}
-  #+end_src
+   We begin with the front matter.
+   #+begin_src latex
+     \NeedsTeXFormat{LaTeX2e}
+     \ProvidesClass{msi-exam}[2020/06/30 MSI Exam Template]
+   #+end_src
+   Next we add some base packages that we want to load by default. Note that we write src_latex[:exports code]{\RequirePackage} instead of src_latex[:exports code]{\usepackage} because we're writing a new class file, which will be loaded before the src_latex[:exports code]{\begin{document}} statement.
+   #+begin_src latex
+     \RequirePackage{amsmath}
+     \RequirePackage{amssymb}
+     \RequirePackage{amsfonts}
+     \RequirePackage{setspace}
+     \RequirePackage{tikz}
+   #+end_src
+   Use the Linux Libertine font if it exists.
+   #+begin_src latex
+     \IfFileExists{libertine.sty}{%
+       \RequirePackage{libertine}
+       \IfFileExists{newtxmath.sty}{%
+         \RequirePackage[libertine]{newtxmath}
+       }{}
+     }{}
+   #+end_src
 
-  Next we can declare some options that the class file will take.
-  First, whether or not to print answers, and whether or not to cancel the space left for solutions.
-  #+begin_src latex
-    \RequirePackage{ifthen}
+   Next we can declare some options that the class file will take.
+   First, whether or not to print answers, and whether or not to cancel the space left for solutions.
+   #+begin_src latex
+     \RequirePackage{ifthen}
 
-    \newif\ifprintanswers
-    \printanswersfalse
-    \DeclareOption{answers}{\printanswerstrue}
-    \DeclareOption{noanswers}{\printanswersfalse}
+     \newif\ifprintanswers
+     \printanswersfalse
+     \DeclareOption{answers}{\printanswerstrue}
+     \DeclareOption{noanswers}{\printanswersfalse}
 
-    \newif\ifcancelspace
-    \cancelspacefalse
-    \DeclareOption{cancelspace}{\cancelspacetrue}
-    \DeclareOption{nocancelspace}{\cancelspacefalse}
-  #+end_src
-  Next, whether or not we should add up the total points.
-  #+begin_src latex
-    \newif\if@addpoints
-    \newif\if@printtotalpoints
-    \def\addpoints{\global\@addpointstrue\global\@printtotalpointstrue}
-    \def\noaddpoints{\global\@addpointsfalse}
-    \@addpointsfalse
-    \@printtotalpointsfalse
-    \DeclareOption{addpoints}{\addpoints}
-  #+end_src
+     \newif\ifcancelspace
+     \cancelspacefalse
+     \DeclareOption{cancelspace}{\cancelspacetrue}
+     \DeclareOption{nocancelspace}{\cancelspacefalse}
+   #+end_src
+   Next, whether or not we should add up the total points.
+   #+begin_src latex
+     \newif\if@addpoints
+     \newif\if@printtotalpoints
+     \def\addpoints{\global\@addpointstrue\global\@printtotalpointstrue}
+     \def\noaddpoints{\global\@addpointsfalse}
+     \@addpointsfalse
+     \@printtotalpointsfalse
+     \DeclareOption{addpoints}{\addpoints}
+   #+end_src
 
-  Finally we have a catchall final statement (the src_latex[:exports code]{\DeclareOption*} command). 
-  #+begin_src latex
-    \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
-  #+end_src
-  Once we have declared all options, we use the following command to execute each option.
-  #+begin_src latex
-    \ProcessOptions \relax
-  #+end_src
-  The resulting ~msi-exam~ documentclass will be based on the pre-existing ~article~ documentclass, so we load it with the options we want.
-  #+begin_src latex
-    \LoadClass[a4paper, 12pt]{article}
-  #+end_src
+   Finally we have a catchall final statement (the src_latex[:exports code]{\DeclareOption*} command). 
+   #+begin_src latex
+     \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+   #+end_src
+   Once we have declared all options, we use the following command to execute each option.
+   #+begin_src latex
+     \ProcessOptions \relax
+   #+end_src
+   The resulting ~msi-exam~ documentclass will be based on the pre-existing ~article~ documentclass, so we load it with the options we want.
+   #+begin_src latex
+     \LoadClass[a4paper, 12pt]{article}
+   #+end_src
 
 ** Utility macros, etc
    Define a macro for the total number of pages.
@@ -93,7 +95,74 @@
    #+end_src
    
 ** Title page
+   This section makes a fancy title page with the ANU logo, etc. The commands src_latex[:exports none]{\anulogo}, src_latex[:exports none]{\anutext}, and src_latex[:exports none]{\uidboxes} are complicated macros to produce the ANU logo, name, and boxes for the student UID.
+   #+begin_src latex
+     \AtBeginDocument{
+       %%% \CountPoints
+       \thispagestyle{plain}
+       \raisebox{-0.7\height}{
+         \anulogo
+       }
+       \raisebox{-0.7\height}{
+         \anutext
+       }
+       \hspace{1cm}
+       \ifthenelse{\boolean{showboxes}}{
+         \uidboxes
+       }{}
+       \begin{center}
+         \vspace{0.6cm}
+         {\large{\textbf{Mathematical Sciences Institute}}} \vspace{3mm}
+         {\large \textbf{EXAMINATION: } \examTitleOne} \vspace{3mm}
+         {\large {\textbf{\examTitleTwo}}}
+         \vspace{3mm}
+         {\large \examTitleThree} \vspace{5mm}
+       \end{center}
+       \vspace{-0.2cm}
+       \hrule
+       \vspace*{0.5cm}
+       \begin{tabular}{@{}lr}
+         \textbf{Exam Duration:} &\examTime\ minutes.\\[1mm]
+         \textbf{Reading Time:} &\examRead\ minutes.
+       \end{tabular}
+       \vspace{5mm}
+  
+       \textbf{Materials Permitted In The Exam Venue:}
+  
+       \examPermitted
+       \vspace*{2mm}
+       \hrule
+       \vspace*{5mm}
+       \textbf{Materials To Be Supplied To Students:}
 
+       \examMaterial
+       \vspace*{2mm}
+       \hrule
+
+       \vspace*{5mm}
+       \textbf{Instructions To Students:}
+
+       \examImportantNotes
+
+       \vfill
+       \ifthenelse{\boolean{showboxes}}{
+         \begin{center}
+           \mbox{
+             \typesetmarkboxes
+           }
+         \end{center}
+       }{}
+       \newpage
+       \onehalfspacing    
+       \thispagestyle{fancy}
+     }
+   #+end_src
+
+   #+begin_src latex :noweb tangle
+     <<anulogo>>
+     <<anutext>>
+     <<uidboxes>>
+   #+end_src
 ** Page layout
    We set headers, footers, etc.
    #+begin_src latex

@@ -16,13 +16,14 @@
    We begin with the front matter.
    #+begin_src latex
      \NeedsTeXFormat{LaTeX2e}
-     \ProvidesClass{msi-exam}[2020/06/30 MSI Exam Template]
+     \ProvidesClass{msi-exam-tangled}[2020/06/30 MSI Exam Template]
    #+end_src
    Next we add some base packages that we want to load by default. Note that we write src_latex[:exports code]{\RequirePackage} instead of src_latex[:exports code]{\usepackage} because we're writing a new class file, which will be loaded before the src_latex[:exports code]{\begin{document}} statement.
    #+begin_src latex
      \RequirePackage{amsmath}
      \RequirePackage{amssymb}
      \RequirePackage{amsfonts}
+     \RequirePackage{fancyhdr}
      \RequirePackage{setspace}
      \RequirePackage{tikz}
    #+end_src
@@ -86,7 +87,7 @@
    This section makes a fancy title page with the ANU logo, etc. The commands src_latex[:exports none]{\anulogo}, src_latex[:exports none]{\anutext}, and src_latex[:exports none]{\uidboxes} are complicated macros to produce the ANU logo, name, and boxes for the student UID.
    #+begin_src latex
      \AtBeginDocument{
-       %%% \CountPoints
+       % \CountPoints
        \thispagestyle{plain}
        \raisebox{-0.7\height}{
          \anulogo{}
@@ -188,7 +189,13 @@
        }%
      }
    #+end_src
-   
+
+** Endnotes
+   The end.
+   #+begin_src latex
+     \endinput
+   #+end_src
+
 * Tangling
   Use minted for \LaTeX{} export.
   #+begin_src emacs-lisp :results silent

@@ -1,13 +1,29 @@
 #+title: Templates to use for exams, assignments, and worksheets at MSI
+#+latex_header: \usepackage{fullpage}
+
+#+begin_src emacs-lisp :exports none
+    (setq org-latex-listings 'minted
+          org-latex-packages-alist '(("" "minted"))
+          org-latex-pdf-process
+          '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  (setq org-latex-minted-options '(("breaklines" "true")
+                                   ("breakanywhere" "true")))
+#+end_src
 
 * Introduction 
-  These class files are based on the instructions at the [[https://www.overleaf.com/learn/latex/Writing_your_own_class][Overleaf guide on writing your own class]], as well as the older version of this class file that was developed by Linda Stals, Griffith Ware, Scott Morrison, and Steve Roberts.
+  These class files are based on the instructions at the [[https://www.overleaf.com/learn/latex/Writing_your_own_class][Overleaf guide on writing your own class]], as well as the older version of these class files that were developed by Linda Stals, Griffith Ware, Scott Morrison, and Steve Roberts.
 
 * MSI exam class file
   :PROPERTIES:
-  :HEADER-ARGS: :tangle artifacts/msi-exam.cls :mkdirp yes
+  :HEADER-ARGS: :tangle artifacts/msi-exam-tangled.cls :mkdirp yes
   :END:
   In this part of the document we'll construct the ~msi-exam.cls~ \LaTeX{} class file.
+  It is heavily based on the ~exam.cls~ documentclass by Philip Hirschhorn, which will be modified to suit the MSI template.
+  Here is the [[https://math.mit.edu/~psh/#ExamCls][source code for the original ~exam~ documentclass]].
+  
+** Front matter and general class options  
   We begin with the front matter.
   #+begin_src latex
     \NeedsTeXFormat{LaTeX2e}
@@ -18,9 +34,45 @@
     \RequirePackage{amsmath}
     \RequirePackage{amssymb}
     \RequirePackage{amsfonts}
+    \RequirePackage{tikz}
   #+end_src
-  In this part we can declare some optional options that the class file will take.
-  At the moment we only have a catchall final statement (the src_latex[:exports code]{\DeclareOption*} command). 
+  Use the Linux Libertine font if it exists.
+  #+begin_src latex
+    \IfFileExists{libertine.sty}{%
+      \RequirePackage{libertine}
+      \IfFileExists{newtxmath.sty}{%
+        \RequirePackage[libertine]{newtxmath}
+      }{}
+    }{}
+  #+end_src
+
+  Next we can declare some options that the class file will take.
+  First, whether or not to print answers, and whether or not to cancel the space left for solutions.
+  #+begin_src latex
+    \RequirePackage{ifthen}
+
+    \newif\ifprintanswers
+    \printanswersfalse
+    \DeclareOption{answers}{\printanswerstrue}
+    \DeclareOption{noanswers}{\printanswersfalse}
+
+    \newif\ifcancelspace
+    \cancelspacefalse
+    \DeclareOption{cancelspace}{\cancelspacetrue}
+    \DeclareOption{nocancelspace}{\cancelspacefalse}
+  #+end_src
+  Next, whether or not we should add up the total points.
+  #+begin_src latex
+    \newif\if@addpoints
+    \newif\if@printtotalpoints
+    \def\addpoints{\global\@addpointstrue\global\@printtotalpointstrue}
+    \def\noaddpoints{\global\@addpointsfalse}
+    \@addpointsfalse
+    \@printtotalpointsfalse
+    \DeclareOption{addpoints}{\addpoints}
+  #+end_src
+
+  Finally we have a catchall final statement (the src_latex[:exports code]{\DeclareOption*} command). 
   #+begin_src latex
     \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
   #+end_src
@@ -32,5 +84,50 @@
   #+begin_src latex
     \LoadClass[a4paper, 12pt]{article}
   #+end_src
-  
 
+** Utility macros, etc
+   Define a macro for the total number of pages.
+   #+begin_src latex
+     \RequirePackage{lastpage}
+     \newcommand{\examTotalPages}{\pageref{LastPage}}
+   #+end_src
+   
+** Title page
+
+** Page layout
+   We set headers, footers, etc.
+   #+begin_src latex
+   #+end_src
+
+** Headers and footers
+
+** Question and answer commands
+   We begin the questions environment. 
+   #+begin_src latex
+     \newenvironment{questions}{%
+       \def\@queslevel{question}%
+       \def\titledquestion##1{%
+         \@bonusfalse
+         \def\thequestiontitle{##1}%
+         \process@question
+       }
+       \def\bonustitledquestion##1{%
+         \@bonustrue
+         \def\thequestiontitle{##1}%
+         \process@question
+       }%
+       \def\question{%
+         \@bonusfalse
+         \def\thequestiontitle{\csname p@question\endcsname
+           \csname thequestion\endcsname}%
+         \process@question
+       }%
+       \def\bonusquestion{%
+         \@bonustrue
+         \def\thequestiontitle{\csname p@question\endcsname
+           \csname thequestion\endcsname}%
+         \process@question
+       }%
+     }
+   #+end_src
+   

@@ -1,0 +1,6 @@
+#+title: MSI template files for exams, assignments, etc
+#+author: Asilata Bapat
+
+This is a work in progress, based on older class files written by Scott Morrison, Steve Roberts, Linda Stals, and Griffith Ware. If you want to look at finished versions of the class files, look at the ~master-old~ branch and read the ~README.md~ file there.
+
+If you want to look at the experimental stuff, read through [[file:msi-templates.org][msi-templates.org]].

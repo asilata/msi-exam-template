@@ -82,7 +82,47 @@
      \RequirePackage{lastpage}
      \newcommand{\examTotalPages}{\pageref{LastPage}}
    #+end_src
-   
+
+   Set default values for some variables, which will be used later in the template (and should be modified in the tex source as necessary).
+   #+begin_src latex
+     \newcommand{\examTitleOne}{Semester X --- Mid-semester examination, YYYY}
+     \newcommand{\examTitleTwo}{MATHXXXX --- Name of Course}
+     \newcommand{\examTitleThree}{Optional third title line}
+     \newcommand{\examFooter}{MATHXXXX --- Mid-sem}
+     \newcommand{\examTime}{120}
+     \newcommand{\examRead}{15}
+     \newcommand{\examConditions}{
+       \begin{itemize}
+         \item Central examination.
+         \item Students must return the examination paper at the end of the examination.
+         \item This examination paper is not available to the ANU Library archives.
+       \end{itemize}
+     }
+     \newcommand{\examPermitted}{
+         \begin{itemize}
+         \item One A4 page with hand written notes on both sides.\\ (This A4 page is to cover both Algebra and Calculus.)
+         \item Unmarked English-to-foreign-language dictionary (no approval from MSI required).
+         \item {\bf No electronic aids are permitted e.g. laptops, phones, calculators.}
+       \end{itemize}
+     }
+     \newcommand{\examMaterial}{
+         \begin{itemize}
+         \item Scribble Paper.
+         \end{itemize} 
+     }
+     \newcommand{\examImportantNotes}{
+       \begin{itemize}   
+       \item \textbf{\it You must justify your answers. Please be neat.}
+     }
+   #+end_src
+
+   Change label number format (for subquestions).
+   #+begin_src latex
+     \renewcommand{\labelenumi}{(\alph{enumi})}
+     \renewcommand{\labelenumii}{(\roman{enumii})}
+     \renewcommand{\labelenumiii}{(\arabic{enumiii})}
+   #+end_src
+
 ** Title page
    This section makes a fancy title page with the ANU logo, etc. The commands src_latex[:exports none]{\anulogo}, src_latex[:exports none]{\anutext}, and src_latex[:exports none]{\uidboxes} are complicated macros to produce the ANU logo, name, and boxes for the student UID.
    #+begin_src latex
@@ -153,12 +193,33 @@
      <<uidboxes>>
    #+end_src
 
-** Page layout
-   We set headers, footers, etc.
+** Page style and layout
+   First redefine the "plain" page style. This uses the ~fancyhdr~ package.
    #+begin_src latex
+     \fancypagestyle{plain}{
+       \fancyhf{} % clear all header and footer fields
+       \renewcommand{\headrulewidth}{0pt}
+       \renewcommand{\footrulewidth}{0pt}
+     }
    #+end_src
 
-** Headers and footers
+   Set headers, footers, page dimensions, etc.
+   #+begin_src latex
+     \lfoot{}%
+     \cfoot{}%
+     \rfoot{\examFooter, Page \thepage\ of \examTotalpages}
+
+     \lhead{}%
+     \chead{}%
+     \rhead{}
+
+     \textwidth=15.5cm \textheight=24.5cm \marginparsep=0cm
+     \oddsidemargin=0cm \evensidemargin=0cm \topmargin=-1.0cm
+     \parindent=0cm
+     \pagestyle{fancy}
+     \renewcommand{\headrulewidth}{0pt}
+     \renewcommand{\footrulewidth}{1pt}
+   #+end_src
 
 ** Question and answer commands
    We begin the questions environment. 
@@ -217,7 +278,7 @@
 
 * Appendix
   Here we define additional code that we need in our class files but that we probably do not want to export, and perhaps want to reuse.
-  For example, the ANU logo.
+  The code is available in the (raw) source file for browsing.
   #+name: anulogo
   #+begin_src latex :exports none
   \newcommand{\anulogo}{
